@@ -1,18 +1,41 @@
 #include <Arduino.h>
+#include <WiFi.h>
 
-// put function declarations here:
-int myFunction(int, int);
+#include <Firebase/FirebaseController.h>
+
+#include <Sensors/GP2Y1010AU0F.h>
+#include <Sensors/DHT22.h>
+#include <Sensors/MQ5.h>
+
+#include <Keys/credentials.h>
+
+void connectToWiFi() {
+  WiFi.begin(WIFI_SSID, WIFI_PASSWORD);
+  while (WiFi.status() != WL_CONNECTED) {
+    delay(1000);
+    Serial.println("Conectando ao WiFi...");
+  }
+  Serial.println("Conectado ao WiFi");
+}
 
 void setup() {
-  // put your setup code here, to run once:
-  int result = myFunction(2, 3);
+  Serial.begin(115200);
+
+  connectToWiFi();
+  initializeFirebase();
+
+  initializeDHT22();
+  initializeDustSensor();
+  initializeMQ5Sensor();
 }
 
 void loop() {
-  // put your main code here, to run repeatedly:
-}
+  float temperature = readTemperature();
+  float humidity = readHumidity();
+  float dustDensity = readDustSensor();
+  float gasLevel = readMQ5Sensor();
+  
+  sendFirebaseData(temperature, humidity, dustDensity, gasLevel);
 
-// put function definitions here:
-int myFunction(int x, int y) {
-  return x + y;
+  delay(10000);
 }
