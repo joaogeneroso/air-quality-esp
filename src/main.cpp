@@ -5,7 +5,7 @@
 
 #include <Sensors/GP2Y1010AU0F.h>
 #include <Sensors/DHT22.h>
-#include <Sensors/MQ5.h>
+#include <Sensors/MQ135.h>
 
 #include <Keys/credentials.h>
 
@@ -26,14 +26,14 @@ void setup() {
 
   initializeDHT22();
   initializeDustSensor();
-  initializeMQ5Sensor();
+  initializeMQ135Sensor();
 }
 
 void loop() {
   float temperature = readTemperature();
   float humidity = readHumidity();
   float dustDensity = readDustSensor();
-  float gasLevel = readMQ5Sensor();
+  float gasLevel = readMQ135Sensor();
   
   sendFirebaseData(temperature, humidity, dustDensity, gasLevel);
 
