@@ -37,5 +37,5 @@ void loop() {
   
   sendFirebaseData(temperature, humidity, dustDensity, gasLevel);
 
-  delay(10000);
+  delay(60000);
 }
